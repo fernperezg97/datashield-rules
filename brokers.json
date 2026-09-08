@@ -1,0 +1,94 @@
+{
+  "version": "1.1.0",
+  "updatedAt": "2026-09-08T17:30:00Z",
+  "brokers": [
+    {
+      "id": "whitepages",
+      "name": "Whitepages",
+      "domain": "whitepages.com",
+      "optOutUrl": "https://www.whitepages.com/suppression-requests",
+      "optOutMethod": "FORM_SUBMISSION",
+      "recheckDays": 30,
+      "requiresCaptcha": true,
+      "requiresEmailVerification": false,
+      "searchUrlTemplate": "https://www.whitepages.com/name/{firstName}-{lastName}/{city}-{state}",
+      "formSelectors": {
+        "profileUrlInput": "input[name='url']",
+        "firstNameInput": "input[name='first_name']",
+        "lastNameInput": "input[name='last_name']",
+        "cityInput": "input[name='city']",
+        "stateInput": "select[name='state']",
+        "emailInput": "input[name='email']",
+        "submitButton": "button[type='submit']"
+      },
+      "verificationSuccessText": "Your opt-out request has been submitted"
+    },
+    {
+      "id": "spokeo",
+      "name": "Spokeo",
+      "domain": "spokeo.com",
+      "optOutUrl": "https://www.spokeo.com/optout",
+      "optOutMethod": "PROFILE_URL_SUBMISSION",
+      "recheckDays": 30,
+      "requiresCaptcha": true,
+      "requiresEmailVerification": true,
+      "searchUrlTemplate": "https://www.spokeo.com/{firstName}-{lastName}/{state}/{city}",
+      "formSelectors": {
+        "emailInput": "input[name='email']",
+        "profileUrlInput": "input[name='url']",
+        "submitButton": "#optout-submit"
+      },
+      "verificationSuccessText": "We have sent a confirmation link"
+    },
+    {
+      "id": "beenverified",
+      "name": "BeenVerified",
+      "domain": "beenverified.com",
+      "optOutUrl": "https://www.beenverified.com/foryou/opt-out",
+      "optOutMethod": "SEARCH_AND_SELECT",
+      "recheckDays": 45,
+      "requiresCaptcha": false,
+      "requiresEmailVerification": true,
+      "formSelectors": {
+        "firstNameInput": "#optout-first-name",
+        "lastNameInput": "#optout-last-name",
+        "stateInput": "#optout-state",
+        "submitButton": "#btn-optout-submit"
+      },
+      "verificationSuccessText": "Opt-out request confirmed"
+    },
+    {
+      "id": "radaris",
+      "name": "Radaris",
+      "domain": "radaris.com",
+      "optOutUrl": "https://radaris.com/control/privacy",
+      "optOutMethod": "PROFILE_URL_SUBMISSION",
+      "recheckDays": 30,
+      "requiresCaptcha": true,
+      "requiresEmailVerification": true,
+      "searchUrlTemplate": "https://radaris.com/p/{firstName}/{lastName}/",
+      "formSelectors": {
+        "profileUrlInput": "#profile_url",
+        "emailInput": "#email",
+        "submitButton": "button[type='submit']"
+      },
+      "verificationSuccessText": "Verification email sent"
+    },
+    {
+      "id": "fastpeoplesearch",
+      "name": "FastPeopleSearch",
+      "domain": "fastpeoplesearch.com",
+      "optOutUrl": "https://www.fastpeoplesearch.com/removal",
+      "optOutMethod": "SEARCH_AND_SELECT",
+      "recheckDays": 30,
+      "requiresCaptcha": true,
+      "requiresEmailVerification": false,
+      "formSelectors": {
+        "emailInput": "#removal_email",
+        "agreeCheckbox": "#agree_terms",
+        "submitButton": "#btn-submit"
+      },
+      "verificationSuccessText": "Record successfully removed"
+    }
+  ]
+}
