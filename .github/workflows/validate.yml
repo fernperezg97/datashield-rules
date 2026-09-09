@@ -1,0 +1,88 @@
+name: Validate and Format Brokers JSON
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  format-and-validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Step A: Automatically format brokers.json using Prettier
+      - name: Format JSON with Prettier
+        run: npx prettier --write brokers.json
+
+      # Step B: Automatically commit formatted changes back to GitHub if needed
+      - name: Commit formatted JSON back to repo
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "style(json): auto-format brokers.json via Prettier"
+          file_pattern: "brokers.json"
+
+      # Step C: Run schema structural validation
+      - name: Validate JSON Syntax and Schema Rules
+        run: |
+          node -e "
+            const fs = require('fs');
+
+            try {
+              const rawData = fs.readFileSync('brokers.json', 'utf8');
+              const data = JSON.parse(rawData);
+
+              if (!data.version || typeof data.version !== 'string') {
+                throw new Error('Root level missing required string property \"version\".');
+              }
+              if (!data.brokers || !Array.isArray(data.brokers)) {
+                throw new Error('Root level missing required array property \"brokers\".');
+              }
+
+              console.log('🔍 Checking ' + data.brokers.length + ' broker definitions...');
+
+              const requiredFields = ['id', 'name', 'domain', 'optOutUrl', 'optOutMethod', 'recheckDays', 'formSelectors'];
+              const seenIds = new Set();
+
+              data.brokers.forEach((broker, index) => {
+                const label = broker.name || ('Broker at index ' + index);
+
+                requiredFields.forEach(field => {
+                  if (broker[field] === undefined || broker[field] === null || broker[field] === '') {
+                    throw new Error('[' + label + '] Missing required field: \"' + field + '\".');
+                  }
+                });
+
+                if (seenIds.has(broker.id)) {
+                  throw new Error('[' + label + '] Duplicate broker ID detected: \"' + broker.id + '\".');
+                }
+                seenIds.add(broker.id);
+
+                if (typeof broker.recheckDays !== 'number' || broker.recheckDays <= 0) {
+                  throw new Error('[' + label + '] \"recheckDays\" must be a positive number.');
+                }
+
+                if (typeof broker.formSelectors !== 'object' || Array.isArray(broker.formSelectors)) {
+                  throw new Error('[' + label + '] \"formSelectors\" must be a valid key-value object.');
+                }
+
+                if (!broker.optOutUrl.startsWith('http://') && !broker.optOutUrl.startsWith('https://')) {
+                  throw new Error('[' + label + '] \"optOutUrl\" must start with http:// or https://.');
+                }
+              });
+
+              console.log('✅ Validation Passed: All ' + data.brokers.length + ' brokers are structurally valid.');
+
+            } catch (err) {
+              console.error('❌ Schema Validation Failed: ' + err.message);
+              process.exit(1);
+            }
+          "
