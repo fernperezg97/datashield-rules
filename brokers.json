@@ -58,23 +58,6 @@
       "verificationSuccessText": "Opt-out request confirmed"
     },
     {
-      "id": "radaris",
-      "name": "Radaris",
-      "domain": "radaris.com",
-      "optOutUrl": "https://radaris.com/control/privacy",
-      "optOutMethod": "PROFILE_URL_SUBMISSION",
-      "recheckDays": 30,
-      "requiresCaptcha": true,
-      "requiresEmailVerification": true,
-      "searchUrlTemplate": "https://radaris.com/p/{firstName}/{lastName}/",
-      "formSelectors": {
-        "profileUrlInput": "#profile_url",
-        "emailInput": "#email",
-        "submitButton": "button[type='submit']"
-      },
-      "verificationSuccessText": "Verification email sent"
-    },
-    {
       "id": "fastpeoplesearch",
       "name": "FastPeopleSearch",
       "domain": "fastpeoplesearch.com",
