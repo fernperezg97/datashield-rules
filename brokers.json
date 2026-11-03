@@ -44,7 +44,7 @@
       "id": "beenverified",
       "name": "BeenVerified",
       "domain": "beenverified.com",
-      "optOutUrl": "https://www.beenverified.com/foryou/opt-out",
+      "optOutUrl": "https://www.beenverified.com/f/optout/search",
       "optOutMethod": "SEARCH_AND_SELECT",
       "recheckDays": 45,
       "requiresCaptcha": false,
